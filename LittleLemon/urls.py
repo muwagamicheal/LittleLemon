@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+#simple jwt imports
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Simple JWT paths
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
