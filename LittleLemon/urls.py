@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Simple JWT paths
-    #path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # djoser authentication paths
     url(r'^auth/', include('djoser.urls')),
