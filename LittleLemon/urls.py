@@ -29,7 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #path('api/', include('LittleLemonAPI.urls')),
     path('api/', include('djoser.urls')),
-
     path('auth/', include('djoser.urls.authtoken')),
     
     # Djoser authentication endpoints
