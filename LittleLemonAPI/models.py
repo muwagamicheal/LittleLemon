@@ -6,6 +6,9 @@ class ItemCategory(models.Model):
     category_name = models.CharField(max_length=25, unique= True)
     description = models.CharField(max_length= 250, blank= True)
 
+    def __str__(self):
+        return self.category_name
+
 class OrderStatus(models.Model):
     status_name = models.CharField(max_length=25, unique= True)
     description = models.CharField(max_length= 250, blank= True)
