@@ -27,18 +27,18 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('api/', include('LittleLemonAPI.urls')),
+    path('api/', include('LittleLemonAPI.urls')),
     path('api/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     
     # Djoser authentication endpoints
     path('auth/', include('djoser.urls')), # you can see the complete of endpoints provide by djose in the docs 'https://djoser.readthedocs.io/en/latest/getting_started.html'
     # Simple JWT paths
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    #path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # djoser authentication paths
-    url(r'^auth/', include('djoser.urls')), # the use of urls has been depreciated since django 3 
-    url(r'^auth/', include('djoser.urls.authtoken')), # the use of urls has been depreciated since django 3 
-    url(r'^auth/', include('djoser.urls.jwt')), # the use of urls has been depreciated since django 3 
+    #url(r'^auth/', include('djoser.urls')), # the use of urls has been depreciated since django 3 
+    #url(r'^auth/', include('djoser.urls.authtoken')), # the use of urls has been depreciated since django 3 
+    #url(r'^auth/', include('djoser.urls.jwt')), # the use of urls has been depreciated since django 3 
     
 ]
