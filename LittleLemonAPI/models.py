@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class ItemCategory(models.Model):
-    category_name = models.CharField(max_length=25, unique= True)
+    category_name = models.CharField(max_length=25, unique= True, blank=False)
     description = models.CharField(max_length= 250, blank= True)
 
     def __str__(self):
@@ -17,7 +17,7 @@ class MenuItem(models.Model):
     item_name = models.CharField(max_length=25, unique= True)
     description = models.CharField(max_length= 250, blank= True)
     price = models.IntegerField( default= 0)
-    item_category = models.ForeignKey(ItemCategory, on_delete=models.DO_NOTHING)
+    item_category = models.ForeignKey(ItemCategory, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.item_name
