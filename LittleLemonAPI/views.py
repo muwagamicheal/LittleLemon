@@ -26,37 +26,15 @@ class MenuItemView(generics.ListCreateAPIView, generics.UpdateAPIView, generics.
     filtering_fields = ['price']
     search_fields = ['item_name']
 
+     # Used to retrieve all menu items in the database
     def get(self, request):
         queryset = self.get_queryset()
         results = self.serializer_class(queryset, many=True).data    
         return Response(results)
 
-        """
-        if self.has_permission(request, self):
-            queryset = self.get_queryset()
-            results = self.serializer_class(queryset, many=True).data
-            
-            return Response(results)
-        else:
-            # Do something else if user does not have permission
-            return Response('User does not have permission')
-        """
-
+     # Used to create new menu items in the database
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
-        return Response(serializer.data)
-
-        """
-
-        
-        if self.has_permission(self, request):
-            serializer = self.get_serializer(data = request.data)
-            serializer.is_valid(raise_exception = True)
-            serializer.save()
-            return Response(serializer.data, status = status.HTTP_202_CREATED)
-        else:
-            return Response('User does not have permission to create menu item')
-        """
-            
+        return Response(serializer.data)       
