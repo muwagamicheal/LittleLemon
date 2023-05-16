@@ -47,6 +47,13 @@ In this project, my  APIs endpoint need to make it possible for  end-users to pe
 
 21.	Customers can browse their own orders
 
-# Required Endpoints
+# Required Project Endpoints
+** User registration and Token generation endpoints *
 1. /api/users - * any one can create account using username, email, and password - this hass been implemented and its working.
+  This has been implemeted and is woking just fine
 2. /api/users/users/me/ - **Displays username and email of the user with a valid token
+  This had been implemented and is working fine.
+3. /token/login/ - * Anyone with a valid username and password can generate a token to be used with other API'calls
+4. 
+
+
