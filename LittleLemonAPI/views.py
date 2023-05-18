@@ -4,7 +4,7 @@ from .models import MenuItem, ItemCategory
 from .serializers import MenuItemSerializer, CategorySerializer
 
 # 
-from rest_framework.views import APIView, View
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, BasePermissionMetaclass
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -38,8 +38,8 @@ class CategoryView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
 
  # Used to retrieve all menu items in the database
-class MenuItemView(generics.ListCreateAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
-    permission_classes = (IsAuthenticated,IsManager)
+class MenuItemView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated, IsManager)
 
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
@@ -54,46 +54,61 @@ class MenuItemView(generics.ListCreateAPIView, generics.UpdateAPIView, generics.
         return Response(results)
 
      # Used to create new menu items in the database
+     
+    '''
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+    '''
 # Used to manipulate individual items in menu-items in the database.
 class MenuItemDetailView(APIView):
-    permission_class = [IsAuthenticated]
-    #queryset = MenuItem.objects.all()
+    permission_class = [permissions.IsAuthenticated, IsManager]
+    queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
 
     #Retrieve Invidual Item
     def get_object(self, pk):
-           try:
-               return MenuItem.objects.get(pk=pk)
-           except MenuItem.DoesNotExist:
-               #message = "Item not found"
-               return Response( 'Item not found', status=status.HTTP_404_NOT_FOUND)
-    def get(self, request, pk):
+        try:
+            return MenuItem.objects.get(id=pk)
+        except MenuItem.DoesNotExist:
+            return None
+    #Retrieve individual item
+    def get(self, request, pk, *arg, **kwargs):
         item = self.get_object(pk)
-        result = self.serializer_class(item, many=False)
-        #item = generics.get_object_or_404(result, pk=pk)
-        serializer = self.get_serializer(result)
-        return Response(serializer.data)
+        if not item:
+            return Response({"result":"Item Does not Exist"}, status=status.HTTP_400_BAD_REQUEST)
+        result = MenuItemSerializer(item).data
+        return Response(result, status=status.HTTP_200_OK)
     
     #Update Individual Item
-    def put(self, request, pk):
-        queryset = self.get_queryset()
-        item = generics.get_object_or_404(queryset, pk=pk)
-        
-        serializer = self.get_serializer(item, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    def put(self, request, pk,*args, **kwargs):
+        update = self.get_object(pk)
+        #item = generics.get_object_or_404(update, pk=pk)
+        if not update:
+            item = {'result','Item not found'}
+            return Response(item, status=status.HTTP_404_BAD_REQUEST)
+        data = {
+            'item_name':request.data.get('item_name'),
+            'description':request.data.get('description'),
+            'price':request.data.get('price'),
+            'item_category':request.data.get('item_category')
+        }
+        serializer = MenuItemSerializer(instance = update, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        #serializer = self.get_serializer(item, data=request.data)
+        #serializer.is_valid(raise_exception=True)
+        #serializer.save()
+        return Response(serializer.errors, status=status.HTPP_400_BAD_REQUEST)
     
     #Delete Individual Item.
-    def delete(self, request, pk):
-        queryset = self.get_queryset()
-        item = generics.get_object_or_404(queryset, pk=pk)
+    def delete(self, request, pk, *args, **kwargs):
+        item = self.get_object(pk)
+        if not item:
+            return Response({"response": "Object with Supplied ID does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"response":"Item has been Deleted "},status=status.HTTP_200_OK)
         

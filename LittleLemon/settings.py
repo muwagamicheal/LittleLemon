@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated', # this is used for prject level permissions to authenticated users.
         #'rest_framework_simplejwt.authentication.JWTAuthentication',
         # token based authentication
-        'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
